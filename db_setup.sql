@@ -147,11 +147,36 @@ CREATE TRIGGER queue_update
 DROP TABLE IF EXISTS job2attribute;
 
 CREATE TABLE IF NOT EXISTS job2attribute (
-    query_id    VARCHAR(36) NOT NULL CHECK(query_id != ''),
-    key             VARCHAR(50),
-    value           VARCHAR(50),
+    query_id        VARCHAR(36) NOT NULL CHECK(query_id != ''),
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (query_id) REFERENCES queue(id) ON DELETE CASCADE
 );
+
+
+
+--
+-- RESPONSES
+--
+
+DROP TABLE IF EXISTS responses;
+
+CREATE TABLE IF NOT EXISTS responses (
+    device_id       VARCHAR(36) NOT NULL CHECK(device_id != ''),
+    query_id        VARCHAR(36) NOT NULL CHECK(query_id != ''),
+    -- response...
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE,
+    FOREIGN KEY (query_id) REFERENCES queue(id) ON DELETE CASCADE
+);
+
+DROP TRIGGER IF EXISTS responses_update ON responses;
+CREATE TRIGGER responses_update
+    BEFORE UPDATE ON responses
+        FOR EACH ROW
+            EXECUTE PROCEDURE update_modified_column();
+
 
 
 
@@ -175,6 +200,7 @@ INSERT INTO job2attribute(query_id, key, value) VALUES ('d123ce0d-043c-3187-8e4f
 INSERT INTO job2attribute(query_id, key, value) VALUES ('d123ce0d-043c-3187-8e4f-2c97b9f2f25a', 'make', 'ford');
 INSERT INTO job2attribute(query_id, key, value) VALUES ('d123ce0d-043c-3187-8e4f-2c97b9f2f25a', 'model', 'forester');
 INSERT INTO job2attribute(query_id, key, value) VALUES ('a411f3a9-35a3-7248-f03c-81019e088e13', 'model', '*');
+
 
 
 WITH jobs AS (
@@ -206,5 +232,54 @@ INNER JOIN jobs
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+--
+-- -- @function is_password
+-- -- @description check user password
+-- CREATE OR REPLACE FUNCTION is_password(usr TEXT, psw TEXT)
+--     RETURNS TEXT AS
+-- $BODY$
+-- BEGIN
+--     -- back door for using hashed password for login
+--     PERFORM * FROM users
+--         WHERE
+--             users.username = usr
+--         AND (
+--             users.password = psw
+--                 OR
+--             users.password = crypt(psw, salt)
+--         );
+--     -- check results
+--     IF FOUND THEN
+--         RETURN TRUE;
+--     ELSE
+--         RETURN FALSE;
+--     END IF;
+-- END;
+-- $BODY$
+-- LANGUAGE 'plpgsql';
+--
 
 --
