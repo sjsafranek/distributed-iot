@@ -174,8 +174,7 @@ INSERT INTO queue (name, query) VALUES ('test_query_3', '{"method":"ping"}');
 INSERT INTO job2attribute(query_id, key, value) VALUES ('d123ce0d-043c-3187-8e4f-2c97b9f2f25a', 'make', 'subaru');
 INSERT INTO job2attribute(query_id, key, value) VALUES ('d123ce0d-043c-3187-8e4f-2c97b9f2f25a', 'make', 'ford');
 INSERT INTO job2attribute(query_id, key, value) VALUES ('d123ce0d-043c-3187-8e4f-2c97b9f2f25a', 'model', 'forester');
-
-
+INSERT INTO job2attribute(query_id, key, value) VALUES ('a411f3a9-35a3-7248-f03c-81019e088e13', 'model', '*');
 
 
 WITH jobs AS (
@@ -188,10 +187,18 @@ WITH jobs AS (
         ON (device_attributes.key = job2attribute.key OR job2attribute.key = '*')
         AND (device_attributes.value = job2attribute.value OR job2attribute.value = '*')
         AND device_attributes.device_id = '2e79f4a9-d085-51fe-b842-f93392e2e0a1'
+    WHERE queue.is_deleted = 'false'
+    AND  queue.is_active = 'true'
     GROUP BY queue.id
 )
 SELECT
-    json_agg(queue.*)
+    json_build_object(
+        'queries',
+        COALESCE(
+            json_agg(queue.*),
+            '[]'
+        )
+    ) AS data
 FROM queue
 INNER JOIN jobs
     ON jobs.query_id = queue.id;
