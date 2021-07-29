@@ -184,6 +184,12 @@ CREATE TRIGGER responses_update
 
 
 
+
+
+
+
+
+
 INSERT INTO devices (name) VALUES ('test_device');
 
 INSERT INTO device_attributes (device_id, key, value) VALUES
