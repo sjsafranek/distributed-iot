@@ -13,15 +13,8 @@ import pynmea2
 # import bluetooth
 
 
-# protocol = 'TCP'
-# host = '192.168.0.21'
-# host = 'localhost'
-# port = 4352
-# protocol = 'BLUETOOTH'
-# host = 'F4:8C:50:E7:45:95'
-# port = 1
+# Configuration
 BUFF_SIZE = 1024    # 4 KiB
-
 
 
 # Setup logging
@@ -34,10 +27,8 @@ logger.addHandler(streamhandler)
 
 
 
-
-
 def recvall(sock):
-    sock.settimeout(6000)
+    sock.settimeout(600)
     buff = ''
     while True:
 

@@ -25,6 +25,8 @@ http://max.kellermann.name/download/blue-nmea/BlueNMEA-2.1.3.apk
 
 ```bash
 $ sudo python3 -m pip install --upgrade pynmea2
+$ sudo apt install adb
+$ adb devices
 $ adb forward tcp:4352 tcp:4352
 ```
 
