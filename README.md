@@ -41,6 +41,12 @@ telnet 192.168.0.21 4352
 
 
 
+for port in {1..30}; do
+	echo $port
+	python3 edge.py -protocol bluetooth -host 'F8:E6:1A:DB:59:84' -port $port
+done
+
+
 
 bluetooth
 $ hcitool dev

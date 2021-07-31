@@ -134,6 +134,14 @@ def main(protocol, host, port):
                     # Save (commit) the changes
                     conn.commit()
 
+                # elif type(message) is pynmea2.types.talker.GLL:
+                #     print(message)
+                #     print(dir(message))
+
+                # elif type(message) is pynmea2.types.talker.RMC:
+                #         print(message)
+                #         print(dir(message))
+
 
 
 
