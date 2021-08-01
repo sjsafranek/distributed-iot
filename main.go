@@ -175,6 +175,8 @@ func main() {
 			}
 		}
 
+		// logger.Debug(message)
+
 	})
 
 }
