@@ -8,10 +8,11 @@ import (
 )
 
 type Config struct {
-	Title    string `toml:"title"`
-	DeviceID string `toml:"device_id"`
-	Host     string `toml:"host"`
-	Port     int    `toml:"port"`
+	Title      string `toml:"title"`
+	DeviceID   string `toml:"device_id"`
+	Host       string `toml:"host"`
+	Port       int    `toml:"port"`
+	SerialPort string `toml:"serial_port"`
 }
 
 func (self *Config) Fetch(file string) error {
